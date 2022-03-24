@@ -17,8 +17,6 @@ class GameFragment : Fragment() {
     private var _binding: GameFragmentBinding? = null
     private val binding get() = _binding!!
 
-    //private val viewModel by activityViewModels<ViewModel>()
-
     private val viewModel: ViewModel
             by navGraphViewModels(R.id.nav_graph_game) {
                 defaultViewModelProviderFactory

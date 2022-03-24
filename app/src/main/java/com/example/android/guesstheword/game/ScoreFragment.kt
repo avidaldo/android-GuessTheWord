@@ -40,4 +40,5 @@ class ScoreFragment : Fragment() {
         _binding = null
     }
 
+
 }

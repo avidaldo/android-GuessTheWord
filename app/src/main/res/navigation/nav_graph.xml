@@ -36,13 +36,26 @@
                 app:launchSingleTop="true"
                 app:popEnterAnim="@anim/slide_in_right"
                 app:popExitAnim="@anim/slide_out_left"
-                app:popUpTo="@+id/title_destination" />
+                app:popUpTo="@id/nav_graph_game" />
+
+            <!-- https://stackoverflow.com/a/57611100
+            https://developer.android.com/guide/navigation/navigation-navigate#pop
+
+
+            app:popUpTo="@+id/title_destination"
+            Esta línea hacía que el back button llevara al fragment de
+            título, pero hacía que el viewmodel funcionase mal -->
+
+
         </fragment>
         <fragment
             android:id="@+id/score_destination"
             android:name="com.example.android.guesstheword.game.ScoreFragment"
             android:label="score_fragment"
             tools:layout="@layout/score_fragment">
+            <action
+                android:id="@+id/action_score_destination_to_title_destination"
+                app:destination="@id/title_destination" />
         </fragment>
     </navigation>
 </navigation>

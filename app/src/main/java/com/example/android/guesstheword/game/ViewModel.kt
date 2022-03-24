@@ -42,12 +42,12 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     /** Methods for updating the UI **/
     fun onSkip() {
         // https://stackoverflow.com/questions/57219811/is-it-possible-to-increment-mutablelivedata-without-additional-variable
-        score.value?.let { a -> score.value = a-1 }
+        score.value?.let { score.value = it-1 }
         nextWord()
     }
 
     fun onCorrect() {
-        score.value?.let { a -> score.value = a+1 }
+        score.value?.let { score.value = it+1 }
         nextWord()
     }
 
