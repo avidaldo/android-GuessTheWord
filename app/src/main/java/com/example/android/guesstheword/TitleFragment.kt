@@ -1,4 +1,4 @@
-package com.example.android.guesstheword.screens
+package com.example.android.guesstheword
 
 import android.os.Bundle
 import android.view.LayoutInflater

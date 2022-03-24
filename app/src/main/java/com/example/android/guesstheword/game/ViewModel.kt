@@ -1,4 +1,4 @@
-package com.example.android.guesstheword.screens
+package com.example.android.guesstheword.game
 
 import android.app.Application
 import android.util.Log
