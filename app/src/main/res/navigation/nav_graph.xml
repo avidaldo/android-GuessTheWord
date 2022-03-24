@@ -2,11 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/title_destination">
 
     <fragment
         android:id="@+id/title_destination"
-        android:name="com.example.android.guesstheword.screens.title.TitleFragment"
+        android:name="com.example.android.guesstheword.screens.TitleFragment"
         android:label="title_fragment"
         tools:layout="@layout/title_fragment">
         <action
@@ -20,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/game_destination"
-        android:name="com.example.android.guesstheword.screens.game.GameFragment"
+        android:name="com.example.android.guesstheword.screens.GameFragment"
         android:label="game_fragment"
         tools:layout="@layout/game_fragment">
         <action
@@ -35,12 +36,10 @@
     </fragment>
     <fragment
         android:id="@+id/score_destination"
-        android:name="com.example.android.guesstheword.screens.score.ScoreFragment"
+        android:name="com.example.android.guesstheword.screens.ScoreFragment"
         android:label="score_fragment"
         tools:layout="@layout/score_fragment">
-        <argument
-            android:name="score"
-            android:defaultValue="0"
-            app:argType="integer" />
+        <!-- Dejamos de necesitar argumentos ya que recuperamos la información
+        del ViewModel -->
     </fragment>
 </navigation>

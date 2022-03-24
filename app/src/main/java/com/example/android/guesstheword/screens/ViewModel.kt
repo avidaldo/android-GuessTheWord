@@ -1,20 +1,20 @@
-package com.example.android.guesstheword.screens.game
+package com.example.android.guesstheword.screens
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.example.android.guesstheword.R
 
 /** AndroidViewModel funciona como ViewModel pero permite recibir el contexto, para así poder acceder a recursos
  * https://stackoverflow.com/a/44155403/12270705
  * https://vtsen.hashnode.dev/recommended-ways-to-create-viewmodel-or-androidviewmodel
- * */
-
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+ **/
+class ViewModel(application: Application) : AndroidViewModel(application) {
     private val resources = application.resources
 
-    var word = ""
-    var score = 0
+    var word = MutableLiveData("")
+    var score = MutableLiveData(0)
 
     private lateinit var wordList: MutableList<String>
 
@@ -27,7 +27,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun resetList() {
         wordList = resources.getStringArray(R.array.palabras).toMutableList().apply { shuffle() }
-    // TODO: Igual tiene sentido cargarla primero y solo hacer shuffle en cada reset?
+        // TODO: Igual tiene sentido cargarla primero y solo barajar en cada reset?
     }
 
 
@@ -41,11 +41,13 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Methods for updating the UI **/
     fun onSkip() {
-        score--
+        // https://stackoverflow.com/questions/57219811/is-it-possible-to-increment-mutablelivedata-without-additional-variable
+        score.value?.let { a -> score.value = a-1 }
         nextWord()
     }
+
     fun onCorrect() {
-        score++
+        score.value?.let { a -> score.value = a+1 }
         nextWord()
     }
 
@@ -54,7 +56,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
      */
     private fun nextWord() {
         if (wordList.isNotEmpty()) {
-            word = wordList.removeAt(0)  // Select and remove a word from the list
+            word.postValue(wordList.removeAt(0))
         }
     }
 }
