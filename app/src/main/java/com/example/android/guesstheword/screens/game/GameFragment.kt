@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.guesstheword.databinding.GameFragmentBinding
@@ -15,7 +17,7 @@ class GameFragment : Fragment() {
     private var _binding: GameFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: GameViewModel
+    private val viewModel: GameViewModel by viewModels()
 
     private var currentWord = ""
     private var currentScore = 0
@@ -25,10 +27,6 @@ class GameFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = GameFragmentBinding.inflate(inflater, container, false)
-
-        // Get the viewModel
-        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-
         return binding.root
     }
 
