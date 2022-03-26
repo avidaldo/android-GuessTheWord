@@ -1,13 +1,14 @@
 package com.example.android.guesstheword.screens.game
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 
 class GameViewModel(private val wordList: MutableList<String>) : ViewModel() {
 
-    var word = ""
-    var score = 0
+    var word = MutableLiveData("")
+    var score = MutableLiveData(0)
 
     var wordListRound = wordList.apply { shuffle() }
 
@@ -33,12 +34,13 @@ class GameViewModel(private val wordList: MutableList<String>) : ViewModel() {
 
     /** Methods for updating the UI **/
     fun onSkip() {
-        score--
+        // https://stackoverflow.com/questions/57219811/is-it-possible-to-increment-mutablelivedata-without-additional-variable
+        score.value?.let { score.value = it-1 }
         nextWord()
     }
 
     fun onCorrect() {
-        score++
+        score.value?.let { score.value = it+1 }
         nextWord()
     }
 
@@ -47,7 +49,7 @@ class GameViewModel(private val wordList: MutableList<String>) : ViewModel() {
      */
     private fun nextWord() {
         if (wordListRound.isNotEmpty()) {
-            word = wordListRound.removeAt(0)
+            word.postValue(wordList.removeAt(0))
         }
     }
 }

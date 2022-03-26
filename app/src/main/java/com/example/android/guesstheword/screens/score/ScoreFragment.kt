@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.android.guesstheword.databinding.ScoreFragmentBinding
 
 
@@ -23,9 +22,6 @@ class ScoreFragment : Fragment() {
         ScoreViewModelFactory(ScoreFragmentArgs.fromBundle(requireArguments()).score)
     }
 
-    private lateinit var viewModelFactory: ScoreViewModelFactory
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = ScoreFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,7 +29,13 @@ class ScoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.scoreText.text = viewModel.score.toString()
+
+        /** Aquí no sería muy necesario el patrón observer ya que al puntuación no
+         * sufre cambios durante el ciclo de vida del fragment. De hecho, tampoco
+         * tiene demasiado sentido crear un ViewModel solo para esto. */
+        viewModel.score.observe(viewLifecycleOwner) {
+            binding.scoreText.text = it.toString()
+        }
     }
 
     override fun onDestroyView() {
