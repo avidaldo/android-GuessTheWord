@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
 
 
@@ -17,12 +16,15 @@ class GameFragment : Fragment() {
     private var _binding: GameFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: GameViewModel by viewModels()
+    private val viewModel: GameViewModel by viewModels() {
+        /** Para evitar pasar el contexto (que puede ser una mayor fuente de errores),
+         * leemos el recurso en el fragment y lo enviamos al viewModel como parámetro a
+         * través de un ViewModelFactory */
+        GameViewModelFactory(resources.getStringArray(R.array.palabras).toMutableList())
+    }
 
     private var currentWord = ""
     private var currentScore = 0
-
-    private lateinit var listOfWords: MutableList<String>
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -55,6 +57,7 @@ class GameFragment : Fragment() {
         updateWordText()
         updateScoreText()
     }
+
     private fun onCorrect() {
         viewModel.onCorrect()
         updateScoreText()
@@ -76,5 +79,5 @@ class GameFragment : Fragment() {
     private fun updateScoreText() {
         binding.scoreText.text = viewModel.score.toString()
     }
-
 }
+

@@ -1,22 +1,15 @@
 package com.example.android.guesstheword.screens.game
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import com.example.android.guesstheword.R
+import androidx.lifecycle.ViewModel
 
-/** AndroidViewModel funciona como ViewModel pero permite recibir el contexto, para así poder acceder a recursos
- * https://stackoverflow.com/a/44155403/12270705
- * https://vtsen.hashnode.dev/recommended-ways-to-create-viewmodel-or-androidviewmodel
- * */
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
-    private val resources = application.resources
+class GameViewModel(private val wordList: MutableList<String>) : ViewModel() {
 
     var word = ""
     var score = 0
 
-    private lateinit var wordList: MutableList<String>
+    var wordListRound = wordList.apply { shuffle() }
 
 
     init {
@@ -26,13 +19,12 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun resetList() {
-        wordList = resources.getStringArray(R.array.palabras).toMutableList().apply { shuffle() }
-    // TODO: Igual tiene sentido cargarla primero y solo hacer shuffle en cada reset?
+        wordListRound.apply { shuffle() }
     }
 
 
     /**
-     * Callback called when the ViewModel is destroyed
+     * Método al que se llama cuando se destruye el ViewModel
      */
     override fun onCleared() {
         super.onCleared()
@@ -44,6 +36,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         score--
         nextWord()
     }
+
     fun onCorrect() {
         score++
         nextWord()
@@ -53,8 +46,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
      * Moves to the next word in the list.
      */
     private fun nextWord() {
-        if (wordList.isNotEmpty()) {
-            word = wordList.removeAt(0)  // Select and remove a word from the list
+        if (wordListRound.isNotEmpty()) {
+            word = wordListRound.removeAt(0)
         }
     }
 }
