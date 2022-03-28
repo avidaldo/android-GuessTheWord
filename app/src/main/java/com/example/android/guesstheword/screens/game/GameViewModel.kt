@@ -2,41 +2,34 @@ package com.example.android.guesstheword.screens.game
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.guesstheword.screens.game.GameModel.GameState.JUGANDO
-import com.example.android.guesstheword.screens.game.GameModel.GameState.TERMINADO
 
 
 class GameViewModel(private val wordList: MutableList<String>) : ViewModel() {
 
-    var model = GameModel(wordList)
+    private var model = GameModel(wordList)
 
-    /** Las variables con LiveData serán una representación directa de la vista */
-    var state = MutableLiveData(JUGANDO)
-    var word = MutableLiveData(model.nextWord())
-    var score = MutableLiveData(model.score)
+    var modelLiveData = MutableLiveData(model)
 
 
     /** Métodos que reciben los eventos de la vista **/
 
     fun onSkip() {
-        model.nextWord()?.let {
-            score.value = --model.score
-            word.value = it
-        } ?: state.setValue(TERMINADO)
+        modelLiveData.value = model.apply {  // Actualizamos modelLiveData a model, después de
+            nextWord()  // llamar a nextWord() (que asigna word=null si no quedan palabras en la lista)
+            model.word?.also { model.score-- }  // y, si quedan palabras, decrementa el score
+        }
+
     }
 
     fun onCorrect() {
-        model.nextWord()?.let {
-            score.value = ++model.score
-            word.value = it
-        } ?: state.setValue(TERMINADO)
+        modelLiveData.value = model.apply {
+            nextWord()
+            model.word?.also { model.score++ }
+        }
     }
 
     fun onReset() {
-        model.reset()
-        score.value=model.score
-        word.value=model.nextWord()
-
+        modelLiveData.value = model.apply { reset() }
     }
 
 }

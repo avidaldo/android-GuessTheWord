@@ -42,17 +42,18 @@ class GameFragment : Fragment() {
         binding.endGameButton.setOnClickListener { onEndGame() }
 
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            if (it == GameModel.GameState.TERMINADO) onEndOfWordList()
+        viewModel.modelLiveData.observe(viewLifecycleOwner) { model ->
+
+            // Cambios en la palabra:
+            model.word?.let {  // Si la palabra no es null
+                    binding.wordText.text = it // Se asigna la palabra al textView
+                } ?: onEndOfWordList() // Si es null, índica que no quedan palabras
+
+            // Cambios en la puntuación (score)
+            binding.scoreText.text = model.score.toString()
         }
 
-        viewModel.word.observe(viewLifecycleOwner) {
-            binding.wordText.text = it
-        }
 
-        viewModel.score.observe(viewLifecycleOwner) {
-            binding.scoreText.text = it.toString()
-        }
     }
 
     private fun onEndOfWordList() {
@@ -68,7 +69,7 @@ class GameFragment : Fragment() {
 
     private fun onEndGame() {
         Toast.makeText(activity, "Game has just finished", Toast.LENGTH_SHORT).show()
-        viewModel.score.value?.let {
+        viewModel.modelLiveData.value!!.score.let {
             val action = GameFragmentDirections.actionGameToScore(it)
             NavHostFragment.findNavController(this).navigate(action)
         }
