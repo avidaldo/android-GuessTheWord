@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class GameFragment : Fragment() {
@@ -22,10 +23,6 @@ class GameFragment : Fragment() {
          * través de un ViewModelFactory */
         GameViewModelFactory(resources.getStringArray(R.array.palabras).toMutableList())
     }
-
-    private var currentWord = ""
-    private var currentScore = 0
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = GameFragmentBinding.inflate(inflater, container, false)
@@ -45,6 +42,10 @@ class GameFragment : Fragment() {
         binding.endGameButton.setOnClickListener { onEndGame() }
 
 
+        viewModel.state.observe(viewLifecycleOwner) {
+            if (it == GameModel.GameState.TERMINADO) onEndOfWordList()
+        }
+
         viewModel.word.observe(viewLifecycleOwner) {
             binding.wordText.text = it
         }
@@ -52,6 +53,16 @@ class GameFragment : Fragment() {
         viewModel.score.observe(viewLifecycleOwner) {
             binding.scoreText.text = it.toString()
         }
+    }
+
+    private fun onEndOfWordList() {
+        Snackbar.make(binding.root, R.string.end_word_list, Snackbar.LENGTH_SHORT)
+            .setAction("Reiniciar") { reset() }
+            .show()
+    }
+
+    private fun reset() {
+        viewModel.onReset()
     }
 
 
