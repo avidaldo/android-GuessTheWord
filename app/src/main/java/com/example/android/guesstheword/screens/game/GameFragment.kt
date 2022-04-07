@@ -44,13 +44,14 @@ class GameFragment : Fragment() {
 
         viewModel.modelLiveData.observe(viewLifecycleOwner) { model ->
 
+            // Cambios en la puntuación (score)
+            binding.scoreText.text = model.score.toString()
+
             // Cambios en la palabra:
             model.word?.let {  // Si la palabra no es null
                     binding.wordText.text = it // Se asigna la palabra al textView
                 } ?: onEndOfWordList() // Si es null, índica que no quedan palabras
 
-            // Cambios en la puntuación (score)
-            binding.scoreText.text = model.score.toString()
         }
 
 

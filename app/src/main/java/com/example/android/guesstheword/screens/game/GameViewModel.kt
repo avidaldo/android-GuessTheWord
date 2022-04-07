@@ -15,16 +15,16 @@ class GameViewModel(private val wordList: MutableList<String>) : ViewModel() {
 
     fun onSkip() {
         modelLiveData.value = model.apply {  // Actualizamos modelLiveData a model, después de
-            nextWord()  // llamar a nextWord() (que asigna word=null si no quedan palabras en la lista)
             model.word?.also { model.score-- }  // y, si quedan palabras, decrementa el score
+            nextWord()  // llamar a nextWord() (que asigna word=null si no quedan palabras en la lista)
         }
 
     }
 
     fun onCorrect() {
         modelLiveData.value = model.apply {
-            nextWord()
             model.word?.also { model.score++ }
+            nextWord()
         }
     }
 

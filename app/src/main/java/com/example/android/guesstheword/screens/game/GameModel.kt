@@ -4,7 +4,7 @@ package com.example.android.guesstheword.screens.game
 class GameModel(private val wordList: MutableList<String>) {
 
 
-    private var wordListRound = wordList.toMutableList().apply { shuffle() }
+    private var wordListRound = wordList.toMutableList()//.apply { shuffle() }
     /** Uso toMutableList() para clonar el objeto (en lugar de tener dos punteros al mismo */
 
     var score = 0
@@ -14,7 +14,7 @@ class GameModel(private val wordList: MutableList<String>) {
 
     fun reset() {
         score = 0
-        wordListRound = wordList.toMutableList().apply { shuffle() }
+        wordListRound = wordList.toMutableList()//.apply { shuffle() }
         nextWord()
     }
 
